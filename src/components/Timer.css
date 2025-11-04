@@ -1,15 +1,13 @@
 .timer-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 3rem;
 }
 
 .timer-card {
   background: var(--zen-white);
   border-radius: 24px;
-  padding: 3rem 2rem;
+  padding: 2.5rem 2rem;
   box-shadow: 0 10px 40px var(--zen-shadow-lg);
-  max-width: 400px;
   width: 100%;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -23,7 +21,61 @@
 .timer-header h2 {
   color: var(--zen-moss);
   font-size: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.current-task-display {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  background: var(--zen-cream);
+}
+
+.current-task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.current-task-label {
+  font-size: 0.85rem;
+  color: var(--zen-moss);
+  opacity: 0.8;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.current-task-name {
+  font-size: 1.1rem;
+  color: var(--zen-moss);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.current-task-progress {
+  font-size: 0.9rem;
+  color: var(--zen-sage);
+  font-weight: 500;
+}
+
+.no-task-selected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.no-task-icon {
+  font-size: 1.5rem;
+}
+
+.no-task-message {
+  font-size: 0.95rem;
+  color: var(--zen-moss);
+  opacity: 0.7;
   font-weight: 500;
 }
 
@@ -117,6 +169,37 @@
   transform: translateY(0);
 }
 
+.timer-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 2px 8px var(--zen-shadow) !important;
+}
+
+/* Desktop enhancements */
+@media (min-width: 1024px) {
+  .timer-card {
+    padding: 3rem 2.5rem;
+  }
+
+  .timer-circle-wrapper {
+    width: 240px;
+    height: 240px;
+  }
+
+  .timer-time {
+    font-size: 3.5rem;
+  }
+
+  .current-task-display {
+    padding: 1.25rem 1.75rem;
+  }
+
+  .current-task-name {
+    font-size: 1.2rem;
+  }
+}
+
 @media (max-width: 640px) {
   .timer-card {
     padding: 2rem 1.5rem;
@@ -134,5 +217,13 @@
   .timer-button {
     padding: 0.75rem 1.5rem;
     font-size: 0.9rem;
+  }
+
+  .current-task-display {
+    padding: 0.875rem 1.25rem;
+  }
+
+  .current-task-name {
+    font-size: 1rem;
   }
 }

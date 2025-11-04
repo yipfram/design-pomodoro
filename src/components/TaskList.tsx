@@ -91,7 +91,12 @@ export default function TaskList({
           >
             <div className="task-content">
               <div className="task-header-row">
-                <h3 className="task-title">{task.title}</h3>
+                <div className="task-title-group">
+                  {currentTaskId === task.id && (
+                    <span className="active-indicator" title="Currently active"></span>
+                  )}
+                  <h3 className="task-title">{task.title}</h3>
+                </div>
                 <button
                   className="delete-button"
                   onClick={(e) => {
@@ -103,8 +108,13 @@ export default function TaskList({
                 </button>
               </div>
               <div className="task-progress">
-                <div className="pomodoro-counter">
-                  🍅 {task.completedPomodoros} / {task.targetPomodoros}
+                <div className="pomodoro-counter-row">
+                  <div className="pomodoro-counter">
+                    🍅 {task.completedPomodoros} / {task.targetPomodoros}
+                  </div>
+                  {currentTaskId === task.id && (
+                    <span className="active-badge">Active</span>
+                  )}
                 </div>
                 <div className="progress-bar">
                   <div
