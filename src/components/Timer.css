@@ -1,0 +1,138 @@
+.timer-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.timer-card {
+  background: var(--zen-white);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  box-shadow: 0 10px 40px var(--zen-shadow-lg);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timer-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 48px var(--zen-shadow-lg);
+}
+
+.timer-header h2 {
+  color: var(--zen-moss);
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.timer-circle-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 2rem;
+}
+
+.timer-progress {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer-progress-bg {
+  fill: none;
+  stroke: var(--zen-mint);
+  stroke-width: 8;
+}
+
+.timer-progress-bar {
+  fill: none;
+  stroke: var(--zen-sage);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-time {
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--zen-moss);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.05em;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.timer-button {
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px var(--zen-shadow);
+}
+
+.timer-button.play,
+.timer-button.pause {
+  background: var(--zen-sage);
+  color: white;
+  flex: 1;
+}
+
+.timer-button.play:hover,
+.timer-button.pause:hover {
+  background: var(--zen-moss);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--zen-shadow-md);
+}
+
+.timer-button.reset {
+  background: var(--zen-cream);
+  color: var(--zen-moss);
+}
+
+.timer-button.reset:hover {
+  background: var(--zen-mint);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--zen-shadow-md);
+}
+
+.timer-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .timer-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .timer-circle-wrapper {
+    width: 180px;
+    height: 180px;
+  }
+
+  .timer-time {
+    font-size: 2.5rem;
+  }
+
+  .timer-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}

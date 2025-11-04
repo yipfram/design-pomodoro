@@ -1,0 +1,60 @@
+.app {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 3rem;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-top: 2rem;
+}
+
+.app-title {
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--zen-moss);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.app-subtitle {
+  font-size: 1.1rem;
+  color: var(--zen-sage);
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.app-footer {
+  margin-top: 4rem;
+  text-align: center;
+  color: var(--zen-moss);
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .app {
+    padding-bottom: 2rem;
+  }
+
+  .app-header {
+    margin-bottom: 2rem;
+    padding-top: 1rem;
+  }
+
+  .app-title {
+    font-size: 2rem;
+  }
+
+  .app-subtitle {
+    font-size: 1rem;
+  }
+
+  .app-footer {
+    margin-top: 2rem;
+  }
+}

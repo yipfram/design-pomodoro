@@ -1,0 +1,94 @@
+:root {
+  /* Zen Nature Color Palette */
+  --zen-sage: #8FBC8F;
+  --zen-moss: #6B8E6B;
+  --zen-leaf: #A8D5A8;
+  --zen-mint: #C8E6C8;
+  --zen-cream: #F0F4F0;
+  --zen-white: #FAFCFA;
+  --zen-shadow: rgba(107, 142, 107, 0.1);
+  --zen-shadow-md: rgba(107, 142, 107, 0.15);
+  --zen-shadow-lg: rgba(107, 142, 107, 0.2);
+
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: var(--zen-moss);
+  background-color: var(--zen-cream);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--zen-white) 0%, var(--zen-cream) 100%);
+}
+
+#root {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--zen-moss);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--zen-sage);
+  outline-offset: 2px;
+}
+
+input {
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: 2px solid var(--zen-sage);
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--zen-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--zen-mint);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--zen-sage);
+}
