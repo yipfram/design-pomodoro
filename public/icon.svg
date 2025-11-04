@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="64" fill="#86EFAC"/>
+  <circle cx="256" cy="220" r="120" fill="#166534" opacity="0.7"/>
+  <circle cx="256" cy="256" r="100" fill="none" stroke="#166534" stroke-width="20"/>
+  <line x1="256" y1="180" x2="256" y2="256" stroke="#F0FDF4" stroke-width="16" stroke-linecap="round"/>
+  <line x1="256" y1="256" x2="320" y2="256" stroke="#F0FDF4" stroke-width="16" stroke-linecap="round"/>
+  <path d="M180 360 Q256 340 332 360" fill="none" stroke="#166534" stroke-width="10" stroke-linecap="round" opacity="0.5"/>
+  <text x="256" y="420" font-family="Arial, sans-serif" font-size="48" fill="#166534" text-anchor="middle" font-weight="bold">ZEN</text>
+</svg>

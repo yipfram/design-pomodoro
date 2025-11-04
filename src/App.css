@@ -1,0 +1,63 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+}
+
+.app-title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #166534;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.app-subtitle {
+  font-size: 1rem;
+  color: #22C55E;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.app-main {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.timer-section {
+  display: flex;
+  justify-content: center;
+}
+
+.tasks-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #22C55E;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}

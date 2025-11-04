@@ -137,3 +137,16 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Build output
+dist/
+dist-ssr/
+
+# PWA
+dev-dist/
+*.local
+
+# Temporary files
+*.tmp
+/tmp/
+generate-icons.mjs
