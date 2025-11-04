@@ -45,6 +45,12 @@
   font-size: 0.9rem;
 }
 
+.app-version {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
 /* Desktop two-column layout */
 @media (min-width: 1024px) {
   .app-main-content {
