@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { useTasks } from './hooks';
 import Timer from './components/Timer';
@@ -9,12 +9,14 @@ function App() {
   const { tasks, addTask, deleteTask, incrementPomodoro } = useTasks();
   const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
 
-  // Select first task if none selected
-  useEffect(() => {
-    if (!currentTaskId && tasks.length > 0) {
-      setCurrentTaskId(tasks[0].id);
-    }
-  }, [tasks, currentTaskId]);
+  // Select first task if none selected and clear if task is deleted
+  if (!currentTaskId && tasks.length > 0) {
+    setCurrentTaskId(tasks[0].id);
+  } else if (currentTaskId && !tasks.find(t => t.id === currentTaskId) && tasks.length > 0) {
+    setCurrentTaskId(tasks[0].id);
+  } else if (currentTaskId && tasks.length === 0) {
+    setCurrentTaskId(null);
+  }
 
   const handlePomodoroComplete = () => {
     if (currentTaskId) {

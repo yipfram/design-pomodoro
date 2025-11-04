@@ -10,11 +10,16 @@ interface TimerProps {
 const POMODORO_DURATION = 25 * 60; // 25 minutes in seconds
 const SHORT_BREAK = 5 * 60; // 5 minutes
 const LONG_BREAK = 15 * 60; // 15 minutes
+const POMODOROS_BEFORE_LONG_BREAK = 4;
+
+// Create a single AudioContext for the entire component lifecycle
+let audioContext: AudioContext | null = null;
 
 const Timer = ({ onComplete, currentTask }: TimerProps) => {
   const [timeLeft, setTimeLeft] = useState(POMODORO_DURATION);
   const [isRunning, setIsRunning] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
+  const [currentBreakDuration, setCurrentBreakDuration] = useState(SHORT_BREAK);
   const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -42,10 +47,12 @@ const Timer = ({ onComplete, currentTask }: TimerProps) => {
     if (!isBreak) {
       onComplete();
       // After a pomodoro, start a break
-      const breakDuration = (currentTask?.pomodorosCompleted ?? 0) % 4 === 3 
-        ? LONG_BREAK 
-        : SHORT_BREAK;
+      const pomodorosCompleted = (currentTask?.pomodorosCompleted ?? 0) + 1;
+      const isLongBreak = pomodorosCompleted % POMODOROS_BEFORE_LONG_BREAK === 0;
+      const breakDuration = isLongBreak ? LONG_BREAK : SHORT_BREAK;
+      
       setTimeLeft(breakDuration);
+      setCurrentBreakDuration(breakDuration);
       setIsBreak(true);
     } else {
       // After a break, start a new pomodoro
@@ -55,8 +62,11 @@ const Timer = ({ onComplete, currentTask }: TimerProps) => {
   };
 
   const playNotificationSound = () => {
-    // Create a simple beep using Web Audio API
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    // Create or reuse AudioContext
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
     
@@ -79,7 +89,7 @@ const Timer = ({ onComplete, currentTask }: TimerProps) => {
 
   const resetTimer = () => {
     setIsRunning(false);
-    setTimeLeft(isBreak ? SHORT_BREAK : POMODORO_DURATION);
+    setTimeLeft(isBreak ? currentBreakDuration : POMODORO_DURATION);
   };
 
   const skipToBreak = () => {
@@ -101,7 +111,7 @@ const Timer = ({ onComplete, currentTask }: TimerProps) => {
   };
 
   const progress = isBreak 
-    ? ((SHORT_BREAK - timeLeft) / SHORT_BREAK) * 100
+    ? ((currentBreakDuration - timeLeft) / currentBreakDuration) * 100
     : ((POMODORO_DURATION - timeLeft) / POMODORO_DURATION) * 100;
 
   return (

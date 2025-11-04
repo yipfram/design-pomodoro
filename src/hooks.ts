@@ -15,7 +15,7 @@ export const useTasks = () => {
 
   const addTask = (title: string, pomodorosTarget: number) => {
     const newTask: Task = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       title,
       pomodorosTarget,
       pomodorosCompleted: 0,
