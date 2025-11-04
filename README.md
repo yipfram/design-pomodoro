@@ -43,6 +43,23 @@ The production-ready files will be in the `dist/` directory.
 npm run preview
 ```
 
+### Deploying to GitHub Pages
+
+The app automatically deploys to GitHub Pages via GitHub Actions when you push to the main/master branch.
+
+**Setup (one-time):**
+1. Go to your GitHub repository Settings
+2. Navigate to Pages (under "Code and automation")
+3. Under "Build and deployment", set Source to "GitHub Actions"
+
+**Deploy:**
+Just push to main/master branch:
+```bash
+git push origin main
+```
+
+Your app will be live at: `https://your-username.github.io/design-pomodoro/`
+
 ## How to Use
 
 1. **Add a Task**: Click the "+ Add Task" button and enter your task name and target pomodoros
