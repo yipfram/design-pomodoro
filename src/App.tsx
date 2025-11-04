@@ -9,6 +9,7 @@ import {
   SHORT_BREAK_DURATION,
 } from './types';
 import './App.css';
+import packageJson from '../package.json';
 
 function App() {
   const [tasks, setTasks] = useLocalStorage<Task[]>('zen-pomodoro-tasks', []);
@@ -207,6 +208,7 @@ function App() {
 
       <footer className="app-footer">
         <p>Made with 🌱 for focused living</p>
+        <p className="app-version">v{packageJson.version}</p>
       </footer>
     </div>
   );
