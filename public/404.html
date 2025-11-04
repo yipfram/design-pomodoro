@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script>
+      // For SPAs without routing: redirect any 404 to index.html in the same directory
+      // This ensures each PR preview serves its own index.html for any path
+      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+
+      // Find the base path (e.g., /design-pomodoro/pr-7/)
+      let basePath = '/';
+      if (pathSegments.length >= 1) {
+        // Rebuild base path up to the PR directory
+        if (pathSegments[0] === 'design-pomodoro') {
+          basePath = '/design-pomodoro/';
+          if (pathSegments.length >= 2 && pathSegments[1].startsWith('pr-')) {
+            basePath = '/design-pomodoro/' + pathSegments[1] + '/';
+          }
+        }
+      }
+
+      window.location.replace(window.location.origin + basePath);
+    </script>
+  </head>
+  <body>
+    Redirecting...
+  </body>
+</html>
