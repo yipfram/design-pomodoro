@@ -172,6 +172,8 @@ function App() {
     [tasks, setTasks]
   );
 
+  const currentTask = tasks.find(task => task.id === timerState.currentTaskId);
+
   return (
     <div className="app">
       <header className="app-header">
@@ -179,22 +181,29 @@ function App() {
         <p className="app-subtitle">Focus mindfully, one breath at a time</p>
       </header>
 
-      <Timer
-        timerState={timerState}
-        onTimerComplete={handleTimerComplete}
-        onToggleTimer={handleToggleTimer}
-        onResetTimer={handleResetTimer}
-      />
+      <div className="app-main-content">
+        <div className="timer-section">
+          <Timer
+            timerState={timerState}
+            currentTask={currentTask}
+            onTimerComplete={handleTimerComplete}
+            onToggleTimer={handleToggleTimer}
+            onResetTimer={handleResetTimer}
+          />
+        </div>
 
-      <TaskList
-        tasks={tasks}
-        currentTaskId={timerState.currentTaskId}
-        onAddTask={handleAddTask}
-        onDeleteTask={handleDeleteTask}
-        onSelectTask={handleSelectTask}
-        onCompletePomodoro={handleCompletePomodoro}
-        onToggleComplete={handleToggleComplete}
-      />
+        <div className="tasks-section-wrapper">
+          <TaskList
+            tasks={tasks}
+            currentTaskId={timerState.currentTaskId}
+            onAddTask={handleAddTask}
+            onDeleteTask={handleDeleteTask}
+            onSelectTask={handleSelectTask}
+            onCompletePomodoro={handleCompletePomodoro}
+            onToggleComplete={handleToggleComplete}
+          />
+        </div>
+      </div>
 
       <footer className="app-footer">
         <p>Made with 🌱 for focused living</p>

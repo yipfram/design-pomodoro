@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
-import { TimerState, POMODORO_DURATION } from '../types';
+import { TimerState, POMODORO_DURATION, Task } from '../types';
 import './Timer.css';
 
 interface TimerProps {
   timerState: TimerState;
+  currentTask?: Task;
   onTimerComplete: () => void;
   onToggleTimer: () => void;
   onResetTimer: () => void;
 }
 
-export default function Timer({ timerState, onTimerComplete, onToggleTimer, onResetTimer }: TimerProps) {
+export default function Timer({ timerState, currentTask, onTimerComplete, onToggleTimer, onResetTimer }: TimerProps) {
   const { isRunning, timeLeft, isBreak } = timerState;
 
   useEffect(() => {
@@ -41,6 +42,25 @@ export default function Timer({ timerState, onTimerComplete, onToggleTimer, onRe
           <h2>{isBreak ? '🌿 Take a Break' : '🎯 Focus Time'}</h2>
         </div>
 
+        {!isBreak && (
+          <div className="current-task-display">
+            {currentTask ? (
+              <div className="current-task-info">
+                <span className="current-task-label">Focusing on:</span>
+                <span className="current-task-name">{currentTask.title}</span>
+                <span className="current-task-progress">
+                  {currentTask.completedPomodoros}/{currentTask.targetPomodoros} 🍅
+                </span>
+              </div>
+            ) : (
+              <div className="no-task-selected">
+                <span className="no-task-icon">⚠️</span>
+                <span className="no-task-message">Select a task below to start</span>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="timer-circle-wrapper">
           <svg className="timer-progress" viewBox="0 0 200 200">
             <circle
@@ -69,6 +89,7 @@ export default function Timer({ timerState, onTimerComplete, onToggleTimer, onRe
           <button
             className={`timer-button ${isRunning ? 'pause' : 'play'}`}
             onClick={onToggleTimer}
+            disabled={!isBreak && !currentTask}
           >
             {isRunning ? '⏸ Pause' : '▶ Start'}
           </button>
