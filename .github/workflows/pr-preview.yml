@@ -35,28 +35,16 @@ jobs:
           ref: gh-pages
           path: gh-pages-content
 
-      - name: Copy PR preview to gh-pages
+      - name: Deploy PR preview to gh-pages
         run: |
-          mkdir -p gh-pages-content/pr-${{ github.event.pull_request.number }}
-          cp -r dist/* gh-pages-content/pr-${{ github.event.pull_request.number }}/
-
-      - name: Create PR to gh-pages
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: gh-pages-content
-          branch: pr-preview-deploy-${{ github.event.pull_request.number }}
-          base: gh-pages
-          commit-message: "Deploy preview for PR #${{ github.event.pull_request.number }}"
-          title: "Deploy preview for PR #${{ github.event.pull_request.number }}"
-          body: |
-            This PR deploys a preview for #${{ github.event.pull_request.number }}
-
-            Preview will be available at: https://${{ github.repository_owner }}.github.io/design-pomodoro/pr-${{ github.event.pull_request.number }}/
-
-            This PR can be safely merged or auto-merged.
-          labels: preview-deployment
-          delete-branch: true
+          cd gh-pages-content
+          mkdir -p pr-${{ github.event.pull_request.number }}
+          cp -r ../dist/* pr-${{ github.event.pull_request.number }}/
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pr-${{ github.event.pull_request.number }}
+          git commit -m "Deploy preview for PR #${{ github.event.pull_request.number }}" || echo "No changes to commit"
+          git push origin gh-pages
 
       - name: Comment PR with preview URL
         uses: actions/github-script@v7
@@ -79,15 +67,11 @@ jobs:
 
             const commentBody = `## 🚀 Preview Deployment
 
-            A preview deployment PR has been created for this PR!
+            Preview deployment successful! Your changes are now live at:
 
-            To view the preview:
-            1. Merge the preview deployment PR to \`gh-pages\`
-            2. Visit: ${previewUrl}
+            **Preview URL:** ${previewUrl}
 
-            The preview deployment PR will be automatically updated when you push new commits.
-
-            💡 **Tip:** Enable auto-merge on preview deployment PRs for automatic updates.`;
+            The preview will be automatically updated when you push new commits to this PR.`;
 
             if (botComment) {
               await github.rest.issues.updateComment({
