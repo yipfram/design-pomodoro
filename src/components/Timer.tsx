@@ -8,9 +8,21 @@ interface TimerProps {
   onTimerComplete: () => void;
   onToggleTimer: () => void;
   onResetTimer: () => void;
+  onTogglePip: () => void;
+  isPipActive: boolean;
+  isPipSupported: boolean;
 }
 
-export default function Timer({ timerState, currentTask, onTimerComplete, onToggleTimer, onResetTimer }: TimerProps) {
+export default function Timer({
+  timerState,
+  currentTask,
+  onTimerComplete,
+  onToggleTimer,
+  onResetTimer,
+  onTogglePip,
+  isPipActive,
+  isPipSupported
+}: TimerProps) {
   const { isRunning, timeLeft, isBreak } = timerState;
 
   useEffect(() => {
@@ -100,6 +112,34 @@ export default function Timer({ timerState, currentTask, onTimerComplete, onTogg
             ↻ Reset
           </button>
         </div>
+
+        {isPipSupported && (
+          <div className="pip-controls">
+            <button
+              className={`pip-toggle-button ${isPipActive ? 'active' : ''}`}
+              onClick={onTogglePip}
+              title={isPipActive ? 'Fermer la fenêtre flottante' : 'Ouvrir en fenêtre flottante'}
+            >
+              {isPipActive ? (
+                <>
+                  <span className="pip-icon">⊗</span>
+                  <span>Fermer PiP</span>
+                </>
+              ) : (
+                <>
+                  <span className="pip-icon">⧉</span>
+                  <span>Détacher en fenêtre</span>
+                </>
+              )}
+            </button>
+            {isPipActive && (
+              <div className="pip-status-indicator">
+                <span className="pip-status-dot"></span>
+                <span>Fenêtre active</span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

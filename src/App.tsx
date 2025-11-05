@@ -1,7 +1,11 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import Timer from './components/Timer';
 import TaskList from './components/TaskList';
+import CompletionModal from './components/CompletionModal';
+import PipTimer from './components/PipTimer';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import { useNotificationSound } from './hooks/useNotificationSound';
+import { usePictureInPicture } from './hooks/usePictureInPicture';
 import {
   Task,
   TimerState,
@@ -19,8 +23,11 @@ function App() {
     isBreak: false,
     currentTaskId: null,
   });
+  const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false);
 
   const intervalRef = useRef<number | null>(null);
+  const { playNotificationSound } = useNotificationSound();
+  const { isPipActive, isSupported: isPipSupported, openPip, closePip, updatePipContent } = usePictureInPicture();
 
   // Timer tick effect
   useEffect(() => {
@@ -47,7 +54,13 @@ function App() {
 
   // Play notification sound and show notification
   const notifyComplete = useCallback((isBreak: boolean) => {
-    // Play a gentle notification sound (optional - you can add audio later)
+    // Play notification sound
+    playNotificationSound();
+
+    // Show completion modal
+    setIsCompletionModalOpen(true);
+
+    // Show browser notification if permission granted
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification(
         isBreak ? '🌿 Break time is over!' : '🎯 Pomodoro completed!',
@@ -59,7 +72,7 @@ function App() {
         }
       );
     }
-  }, []);
+  }, [playNotificationSound]);
 
   // Request notification permission on mount
   useEffect(() => {
@@ -175,6 +188,68 @@ function App() {
 
   const currentTask = tasks.find(task => task.id === timerState.currentTaskId);
 
+  // Completion Modal handlers
+  const handleStartBreak = useCallback(() => {
+    setIsCompletionModalOpen(false);
+    setTimerState((prev) => ({
+      ...prev,
+      isRunning: true,
+    }));
+  }, []);
+
+  const handleContinueWorking = useCallback(() => {
+    setIsCompletionModalOpen(false);
+    if (timerState.isBreak) {
+      // After break, start a new pomodoro
+      setTimerState((prev) => ({
+        ...prev,
+        isRunning: false,
+        timeLeft: POMODORO_DURATION,
+        isBreak: false,
+      }));
+    } else {
+      // Skip break, reset to new pomodoro
+      setTimerState((prev) => ({
+        ...prev,
+        isRunning: false,
+        timeLeft: POMODORO_DURATION,
+        isBreak: false,
+      }));
+    }
+  }, [timerState.isBreak]);
+
+  // Picture-in-Picture handlers
+  const handleTogglePip = useCallback(() => {
+    if (isPipActive) {
+      closePip();
+    } else {
+      openPip(
+        <PipTimer
+          timerState={timerState}
+          currentTask={currentTask}
+          onToggleTimer={handleToggleTimer}
+          onResetTimer={handleResetTimer}
+          onClosePip={closePip}
+        />
+      );
+    }
+  }, [isPipActive, timerState, currentTask, handleToggleTimer, handleResetTimer, openPip, closePip]);
+
+  // Update PiP content when timer state changes
+  useEffect(() => {
+    if (isPipActive) {
+      updatePipContent(
+        <PipTimer
+          timerState={timerState}
+          currentTask={currentTask}
+          onToggleTimer={handleToggleTimer}
+          onResetTimer={handleResetTimer}
+          onClosePip={closePip}
+        />
+      );
+    }
+  }, [isPipActive, timerState, currentTask, handleToggleTimer, handleResetTimer, updatePipContent, closePip]);
+
   return (
     <div className="app">
       <header className="app-header">
@@ -190,6 +265,9 @@ function App() {
             onTimerComplete={handleTimerComplete}
             onToggleTimer={handleToggleTimer}
             onResetTimer={handleResetTimer}
+            onTogglePip={handleTogglePip}
+            isPipActive={isPipActive}
+            isPipSupported={isPipSupported}
           />
         </div>
 
@@ -205,6 +283,15 @@ function App() {
           />
         </div>
       </div>
+
+      <CompletionModal
+        isOpen={isCompletionModalOpen}
+        isBreak={timerState.isBreak}
+        task={currentTask}
+        onStartBreak={handleStartBreak}
+        onContinueWorking={handleContinueWorking}
+        onClose={() => setIsCompletionModalOpen(false)}
+      />
 
       <footer className="app-footer">
         <p>Made with 🌱 for focused living</p>
