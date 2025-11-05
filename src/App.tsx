@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import Timer from './components/Timer';
 import TaskList from './components/TaskList';
 import CompletionModal from './components/CompletionModal';
@@ -6,9 +6,9 @@ import PipTimer from './components/PipTimer';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useNotificationSound } from './hooks/useNotificationSound';
 import { usePictureInPicture } from './hooks/usePictureInPicture';
+import { useSyncedTimerState } from './hooks/useSyncedTimerState';
 import {
   Task,
-  TimerState,
   POMODORO_DURATION,
   SHORT_BREAK_DURATION,
 } from './types';
@@ -17,11 +17,12 @@ import packageJson from '../package.json';
 
 function App() {
   const [tasks, setTasks] = useLocalStorage<Task[]>('zen-pomodoro-tasks', []);
-  const [timerState, setTimerState] = useState<TimerState>({
+  const [timerState, setTimerState] = useSyncedTimerState({
     isRunning: false,
     timeLeft: POMODORO_DURATION,
     isBreak: false,
     currentTaskId: null,
+    endTime: null,
   });
   const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false);
 
@@ -74,13 +75,6 @@ function App() {
     }
   }, [playNotificationSound]);
 
-  // Request notification permission on mount
-  useEffect(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
-    }
-  }, []);
-
   const handleTimerComplete = useCallback(() => {
     setTimerState((prev) => {
       const newIsBreak = !prev.isBreak;
@@ -102,16 +96,31 @@ function App() {
         timeLeft: newIsBreak ? SHORT_BREAK_DURATION : POMODORO_DURATION,
         isBreak: newIsBreak,
         currentTaskId: newIsBreak ? null : prev.currentTaskId,
+        endTime: null,
       };
     });
-  }, [notifyComplete, setTasks]);
+  }, [notifyComplete, setTasks, setTimerState]);
+
+  // Watch for timer completion
+  useEffect(() => {
+    if (timerState.isRunning && timerState.timeLeft === 0) {
+      handleTimerComplete();
+    }
+  }, [timerState.isRunning, timerState.timeLeft, handleTimerComplete]);
+
+  // Request notification permission on mount
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }, []);
 
   const handleToggleTimer = useCallback(() => {
     setTimerState((prev) => ({
       ...prev,
       isRunning: !prev.isRunning,
     }));
-  }, []);
+  }, [setTimerState]);
 
   const handleResetTimer = useCallback(() => {
     setTimerState((prev) => ({
@@ -119,7 +128,7 @@ function App() {
       isRunning: false,
       timeLeft: prev.isBreak ? SHORT_BREAK_DURATION : POMODORO_DURATION,
     }));
-  }, []);
+  }, [setTimerState]);
 
   const handleAddTask = useCallback(
     (title: string, targetPomodoros: number) => {
@@ -147,7 +156,7 @@ function App() {
         }));
       }
     },
-    [tasks, setTasks, timerState.currentTaskId]
+    [tasks, setTasks, timerState.currentTaskId, setTimerState]
   );
 
   const handleSelectTask = useCallback(
@@ -159,7 +168,7 @@ function App() {
         }));
       }
     },
-    [timerState.isBreak]
+    [timerState.isBreak, setTimerState]
   );
 
   const handleCompletePomodoro = useCallback(

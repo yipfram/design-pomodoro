@@ -4,26 +4,31 @@
     <meta charset="utf-8">
     <title>Redirecting...</title>
     <script>
-      // For SPAs without routing: redirect any 404 to index.html in the same directory
-      // This ensures each PR preview serves its own index.html for any path
-      const pathSegments = window.location.pathname.split('/').filter(Boolean);
+      // For SPAs without routing: redirect any 404 to the correct base directory
+      (function() {
+        const path = window.location.pathname;
+        const pathSegments = path.split('/').filter(Boolean);
 
-      // Find the base path (e.g., /design-pomodoro/pr-7/)
-      let basePath = '/';
-      if (pathSegments.length >= 1) {
-        // Rebuild base path up to the PR directory
-        if (pathSegments[0] === 'design-pomodoro') {
+        // Determine the correct base path
+        let basePath = '/';
+        if (pathSegments.length >= 1 && pathSegments[0] === 'design-pomodoro') {
           basePath = '/design-pomodoro/';
-          if (pathSegments.length >= 2 && pathSegments[1].startsWith('pr-')) {
+          // Check if this is a PR preview path (pr-1, pr-2, etc.)
+          if (pathSegments.length >= 2 && pathSegments[1].match(/^pr-\d+$/)) {
             basePath = '/design-pomodoro/' + pathSegments[1] + '/';
           }
         }
-      }
 
-      window.location.replace(window.location.origin + basePath);
+        // Only redirect if we're not already at the base path
+        // Use pathname.replace to normalize (remove trailing slash for comparison)
+        const normalizedPath = path.endsWith('/') ? path : path + '/';
+        if (normalizedPath !== basePath) {
+          window.location.replace(basePath);
+        }
+      })();
     </script>
   </head>
   <body>
-    Redirecting...
+    <p>Redirecting...</p>
   </body>
 </html>

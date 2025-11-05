@@ -26,6 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Browser notifications
 - Offline support
 
+## [1.0.1] - 2025-11-05
+
+### Added
+- claude.md file with AI version management instructions
+- Automated version incrementing guidelines for all future changes
+
 ## [Unreleased]
 
 ### Planned

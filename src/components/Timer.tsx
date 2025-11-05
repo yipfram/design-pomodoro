@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { TimerState, POMODORO_DURATION, Task } from '../types';
 import './Timer.css';
 
@@ -23,19 +22,8 @@ export default function Timer({
   isPipActive,
   isPipSupported
 }: TimerProps) {
+export default function Timer({ timerState, currentTask, onToggleTimer, onResetTimer }: TimerProps) {
   const { isRunning, timeLeft, isBreak } = timerState;
-
-  useEffect(() => {
-    if (!isRunning || timeLeft <= 0) return;
-
-    const interval = setInterval(() => {
-      if (timeLeft <= 1) {
-        onTimerComplete();
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [isRunning, timeLeft, onTimerComplete]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
