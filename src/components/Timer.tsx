@@ -15,14 +15,13 @@ interface TimerProps {
 export default function Timer({
   timerState,
   currentTask,
-  onTimerComplete,
+  onTimerComplete: _onTimerComplete,
   onToggleTimer,
   onResetTimer,
   onTogglePip,
   isPipActive,
   isPipSupported
 }: TimerProps) {
-export default function Timer({ timerState, currentTask, onToggleTimer, onResetTimer }: TimerProps) {
   const { isRunning, timeLeft, isBreak } = timerState;
 
   const formatTime = (seconds: number): string => {

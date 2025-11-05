@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import Timer from './components/Timer';
 import TaskList from './components/TaskList';
 import CompletionModal from './components/CompletionModal';
