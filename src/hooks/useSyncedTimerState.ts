@@ -39,6 +39,8 @@ export function useSyncedTimerState(initialState: TimerState) {
   const channelRef = useRef<BroadcastChannel | null>(null);
   const isUpdatingFromSync = useRef(false);
   const updateIntervalRef = useRef<number | null>(null);
+  const isInitialMount = useRef(true);
+  const prevStateRef = useRef<TimerState>(timerState);
 
   // Timer tick effect - updates timeLeft based on endTime
   useEffect(() => {
@@ -138,11 +140,36 @@ export function useSyncedTimerState(initialState: TimerState) {
       return;
     }
 
+    // Check if only timeLeft changed (from timer tick) - don't broadcast in that case
+    // Only broadcast when important fields change: isRunning, isBreak, currentTaskId, endTime
+    const prev = prevStateRef.current;
+    const onlyTimeLeftChanged =
+      timerState.isRunning === prev.isRunning &&
+      timerState.isBreak === prev.isBreak &&
+      timerState.currentTaskId === prev.currentTaskId &&
+      timerState.endTime === prev.endTime &&
+      timerState.timeLeft !== prev.timeLeft;
+
+    prevStateRef.current = timerState;
+
     try {
-      // Save to localStorage
+      // Always save to localStorage for persistence
       localStorage.setItem(STORAGE_KEY, JSON.stringify(timerState));
 
-      // Broadcast to other tabs
+      // Don't broadcast on initial mount - wait for sync with other tabs first
+      // This prevents a new tab from overwriting the state of existing tabs
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+        return;
+      }
+
+      // Don't broadcast if only timeLeft changed (timer tick)
+      // Each tab calculates its own timeLeft based on endTime
+      if (onlyTimeLeftChanged) {
+        return;
+      }
+
+      // Broadcast to other tabs (only after initial mount and for real state changes)
       if (channelRef.current) {
         channelRef.current.postMessage({
           type: 'state-update',
