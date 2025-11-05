@@ -12,6 +12,7 @@ export interface TimerState {
   timeLeft: number;
   isBreak: boolean;
   currentTaskId: string | null;
+  endTime: number | null; // Timestamp when timer should complete (for cross-tab sync)
 }
 
 export const POMODORO_DURATION = 25 * 60; // 25 minutes in seconds
