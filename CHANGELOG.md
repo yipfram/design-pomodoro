@@ -32,6 +32,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - claude.md file with AI version management instructions
 - Automated version incrementing guidelines for all future changes
 
+## [1.0.2] - 2025-11-05
+
+### Fixed
+- Fixed timer glitch and reset issues when opening new tabs
+- Removed duplicate timer tick logic from App.tsx that conflicted with useSyncedTimerState.ts
+- Timer now properly synchronizes across multiple browser tabs without rendering issues
+- Each tab correctly calculates timeLeft based on endTime for accurate cross-tab sync
+
 ## [Unreleased]
 
 ### Planned

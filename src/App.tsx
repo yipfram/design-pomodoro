@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Timer from './components/Timer';
 import TaskList from './components/TaskList';
 import CompletionModal from './components/CompletionModal';
@@ -26,32 +26,8 @@ function App() {
   });
   const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false);
 
-  const intervalRef = useRef<number | null>(null);
   const { playNotificationSound } = useNotificationSound();
   const { isPipActive, isSupported: isPipSupported, openPip, closePip, updatePipContent } = usePictureInPicture();
-
-  // Timer tick effect
-  useEffect(() => {
-    if (timerState.isRunning) {
-      intervalRef.current = window.setInterval(() => {
-        setTimerState((prev) => ({
-          ...prev,
-          timeLeft: Math.max(0, prev.timeLeft - 1),
-        }));
-      }, 1000);
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [timerState.isRunning]);
 
   // Play notification sound and show notification
   const notifyComplete = useCallback((isBreak: boolean) => {
